@@ -1711,13 +1711,13 @@ th {
   z-index: -1;
 }
 .mines__bg .mines-win-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 1000 !important;
   margin: 0;
-  padding-top: 24px; /* Account for status bar */
+  padding-top: 24px;
   align-items: center;
   background-image: url(../media/wins.36784977c217fb572355.webp);
   background-position: 50%;
