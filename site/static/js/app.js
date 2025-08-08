@@ -126,6 +126,9 @@ $(document).ready(function () {
     currency: "RUB",
     language: localStorage.getItem("language") || "ru",
   };
+  let betQueue = [];
+  let isUpdating = false; 
+  const UPDATE_INTERVAL = 1000;
   function applyTranslations() {
     const t = TRANSLATIONS[SETTINGS.language];
     $("#how_to_play_text").text(t.how_play);
@@ -706,8 +709,7 @@ $(document).ready(function () {
   });
 
   socket.on("mines_live_bet_event", (data) => {
-    console.log("🎰 Пришло событие ставки!", data);
-    addBetToHistory(data);
+    betQueue.push(data);
   });
 
   socket.on("connect_error", (error) => {
@@ -764,4 +766,19 @@ $(document).ready(function () {
       listWrapper.children().last().remove();
     }
   }
+  function processBetQueue() {
+    if (isUpdating || betQueue.length === 0) {
+      return;
+    }
+    isUpdating = true;
+  
+    const betsToAdd = betQueue.splice(0, betQueue.length);
+  
+    betsToAdd.forEach(bet => {
+      addBetToHistory(bet);
+    });
+  
+    isUpdating = false;
+  }
+  setInterval(processBetQueue, UPDATE_INTERVAL);
 });
